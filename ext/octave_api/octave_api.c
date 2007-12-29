@@ -12,7 +12,6 @@ void Init_octave_api() {
   OCTAVE_API = rb_define_module_under(OCTAVE_API, "Driver");
   OCTAVE_API = rb_define_module_under(OCTAVE_API, "Native");
   OCTAVE_API = rb_define_module_under(OCTAVE_API, "API");
-  
   rb_define_module_function(OCTAVE_API, "Call", Call, 2);
   
   InitializeOctave();
@@ -20,6 +19,5 @@ void Init_octave_api() {
 
 VALUE Call(VALUE self, VALUE function_name, VALUE arguments)
 {
-  VALUE out = ExecuteCall(function_name, arguments);
-  return out;
+  return ExecuteCall(function_name, arguments);
 }

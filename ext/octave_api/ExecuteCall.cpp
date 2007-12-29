@@ -15,9 +15,10 @@
 
 void InitializeOctave()
 {
-  char *argv[1];
-  argv[0] = "foo";
-  octave_main(1,argv,1);
+  char *argv[2];
+  argv[0] = "octave-ruby";
+  argv[1] = "-q";
+  octave_main(2,argv,1);
 }
 
 void TerminateOctave()
@@ -154,14 +155,19 @@ octave_value toOctaveValue(VALUE val)
     int number_of_rows = FIX2INT(rb_iv_get(val, "@m"));
     int number_of_columns = FIX2INT(rb_iv_get(val, "@n"));
     VALUE cells = rb_iv_get(val, "@cells");
-    VALUE row;
+    VALUE row, cell;
     Matrix matrix = Matrix(number_of_rows, number_of_columns);
     
     for (row_index = 0; row_index < number_of_rows; row_index++) {
       row = RARRAY(cells)->ptr[row_index];
       
       for (column_index = 0; column_index < number_of_columns; column_index++) {
-        matrix(row_index, column_index) = RFLOAT(RARRAY(row)->ptr[column_index])->value;
+        cell = RARRAY(row)->ptr[column_index];
+        if (rb_obj_is_kind_of(cell, rb_path2class("Numeric")) == Qtrue) {
+          matrix(row_index, column_index) = RFLOAT(cell)->value;
+        } else {
+          matrix(row_index, column_index) = octave_NaN;
+        }
       }
     }
     
@@ -179,6 +185,7 @@ VALUE ExecuteCall(VALUE function_name, VALUE arguments)
   octave_value_list argList;
   
   n = RARRAY(arguments)->len;
+  
   for(i = 0; i < n; i++) {
     argList(i) = toOctaveValue(RARRAY(arguments)->ptr[i]);
   }
