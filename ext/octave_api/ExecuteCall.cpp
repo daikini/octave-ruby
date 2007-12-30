@@ -50,6 +50,7 @@ VALUE toRubyValue(octave_value val)
    } else if (val.is_real_matrix()) {
      Matrix matrix;
      MArray<double> values;
+     double cell;
      int i, number_of_values;
      VALUE argv[2];
      
@@ -74,7 +75,12 @@ VALUE toRubyValue(octave_value val)
          values = matrix.row(row_index);
          
          for (column_index = 0; column_index < number_of_columns; column_index++) {
-           rb_ary_push(row, rb_float_new(values(column_index)));
+           cell = values(column_index);
+           if (xisnan(cell) || octave_is_NA(cell)) {
+             rb_ary_push(row, Qnil);
+           } else {
+             rb_ary_push(row, rb_float_new(cell));
+           }
          }
          
          rb_ary_push(cells, row);
@@ -87,7 +93,12 @@ VALUE toRubyValue(octave_value val)
      number_of_values = values.length();
      ruby_val = rb_ary_new2(number_of_values);
      for(i = 0; i < number_of_values; i++) {
-       rb_ary_push(ruby_val, rb_float_new(values(i)));
+       cell = values(i);
+       if (xisnan(cell) || octave_is_NA(cell)) {
+         rb_ary_push(ruby_val, Qnil);
+       } else {
+         rb_ary_push(ruby_val, rb_float_new(cell));
+       }
      }
      
    } else if (val.is_map()) {
@@ -127,8 +138,6 @@ VALUE toRubyValue(octave_value val)
      rb_iv_set(ruby_val, "@cells", cells);
    } else if (val.is_numeric_type()) {
      ruby_val = rb_float_new(val.double_value());
-   } else if (xisnan(val.double_value())) {
-     ruby_val = Qnil;
    } else {
      ruby_val = Qnil;
    }
