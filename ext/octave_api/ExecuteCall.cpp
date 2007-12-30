@@ -19,6 +19,7 @@ void InitializeOctave()
   argv[0] = "octave-ruby";
   argv[1] = "-q";
   octave_main(2,argv,1);
+  bind_internal_variable("crash_dumps_octave_core", false);
 }
 
 void TerminateOctave()
@@ -190,6 +191,7 @@ octave_value toOctaveValue(VALUE val)
 
 VALUE ExecuteCall(VALUE function_name, VALUE arguments)
 {
+  VALUE ruby_val = Qnil;
   int i, n;
   octave_value_list argList;
   
@@ -199,11 +201,11 @@ VALUE ExecuteCall(VALUE function_name, VALUE arguments)
     argList(i) = toOctaveValue(RARRAY(arguments)->ptr[i]);
   }
   
-  octave_save_signal_mask ();
+  octave_save_signal_mask();
   if (octave_set_current_context) {
-    unwind_protect::run_all ();
-    raw_mode (0);
-    octave_restore_signal_mask ();
+    unwind_protect::run_all();
+    raw_mode(0);
+    octave_restore_signal_mask();
   }
 
   can_interrupt = true;
@@ -216,7 +218,7 @@ VALUE ExecuteCall(VALUE function_name, VALUE arguments)
     
     octave_value_list val = feval(std::string(RSTRING(function_name)->ptr), argList, 1);
     if(val.length() > 0 && val(0).is_defined()) {
-      return toRubyValue(val(0));
+      ruby_val = toRubyValue(val(0));
     }
   } catch (octave_interrupt_exception) {
     recover_from_exception();
@@ -229,5 +231,5 @@ VALUE ExecuteCall(VALUE function_name, VALUE arguments)
   octave_restore_signal_mask();
   octave_initialized = false;
 
-  return(Qnil);
+  return(ruby_val);
 }
