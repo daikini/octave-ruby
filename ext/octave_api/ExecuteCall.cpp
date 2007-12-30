@@ -5,7 +5,6 @@
 #include "unwind-prot.h"
 #include "toplev.h"
 #include "error.h" 
-#include "quit.h"
 #include "variables.h"
 #include "sighandlers.h"
 #include "sysdep.h"
@@ -34,8 +33,6 @@ extern void recover_from_exception(void)
   octave_interrupt_immediately = 0;
   octave_interrupt_state = 0;
   octave_allocation_error = 0;
-  octave_restore_signal_mask();
-  octave_catch_interrupts();
 }
 
 VALUE toRubyValue(octave_value val)
@@ -201,15 +198,12 @@ VALUE ExecuteCall(VALUE function_name, VALUE arguments)
     argList(i) = toOctaveValue(RARRAY(arguments)->ptr[i]);
   }
   
-  octave_save_signal_mask();
   if (octave_set_current_context) {
     unwind_protect::run_all();
     raw_mode(0);
-    octave_restore_signal_mask();
   }
 
   can_interrupt = true;
-  octave_catch_interrupts();
   octave_initialized = true;
 
   try {
@@ -228,7 +222,6 @@ VALUE ExecuteCall(VALUE function_name, VALUE arguments)
     error_state = -3;
   }
 
-  octave_restore_signal_mask();
   octave_initialized = false;
 
   return(ruby_val);
