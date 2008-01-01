@@ -185,6 +185,22 @@ octave_value toOctaveValue(VALUE val)
     }
 
     octave_val = matrix;
+  } else if (rb_obj_is_kind_of(val, rb_path2class("Hash")) == Qtrue) {
+    int i;
+    VALUE names = rb_funcall(val, rb_intern("keys"), 0);
+    int number_of_keys = RARRAY(names)->len;
+
+    string_vector keys = string_vector();
+    for (i = 0; i < number_of_keys; i++) {
+      keys.append(std::string(RSTRING(RARRAY(names)->ptr[i])->ptr));
+    }
+
+    Octave_map struct_matrix = Octave_map(dim_vector(1, 1), Cell(keys));
+    for (i = 0; i < number_of_keys; i++) {
+      struct_matrix.contents(std::string(RSTRING(RARRAY(names)->ptr[i])->ptr))(i, 0) = toOctaveValue(rb_hash_aref(val, rb_str_new2(RSTRING(RARRAY(names)->ptr[i])->ptr)));
+    }
+
+    octave_val = struct_matrix;
   } else if (rb_obj_is_kind_of(val, rb_path2class("Octave::StructMatrix")) == Qtrue) {
     int i, row_index, column_index;
     VALUE row, cell;
@@ -200,7 +216,6 @@ octave_value toOctaveValue(VALUE val)
     }
     
     Octave_map struct_matrix = Octave_map(dim_vector(number_of_rows, number_of_columns), Cell(keys));
-
     for (row_index = 0; row_index < number_of_rows; row_index++) {
       row = RARRAY(cells)->ptr[row_index];
     
