@@ -165,6 +165,55 @@ octave_value toOctaveValue(VALUE val)
     octave_val = RFLOAT(val)->value;
   } else if (rb_type(val) == T_FIXNUM) {
     octave_val = FIX2LONG(val);
+  } else if (rb_obj_is_kind_of(val, rb_path2class("Array")) == Qtrue) {
+    int row_index;
+    VALUE values = rb_funcall(val, rb_intern("flatten"), 0);
+    int number_of_rows = RARRAY(values)->len;
+    VALUE cell;
+    Matrix matrix = Matrix(number_of_rows, 1);
+
+    for (row_index = 0; row_index < number_of_rows; row_index++) {
+      cell = RARRAY(values)->ptr[row_index];
+      
+      if (rb_type(cell) == T_FLOAT) {
+        matrix(row_index, 0) = RFLOAT(cell)->value;
+      } else if (rb_type(cell) == T_FIXNUM) {
+        matrix(row_index, 0) = FIX2LONG(cell);
+      } else {
+        matrix(row_index, 0) = octave_NaN;
+      }
+    }
+
+    octave_val = matrix;
+  } else if (rb_obj_is_kind_of(val, rb_path2class("Octave::StructMatrix")) == Qtrue) {
+    int i, row_index, column_index;
+    VALUE row, cell;
+    VALUE cells = rb_iv_get(val, "@cells");
+    VALUE names = rb_iv_get(val, "@names");
+    int number_of_keys = RARRAY(names)->len;
+    int number_of_rows = FIX2INT(rb_iv_get(val, "@m"));
+    int number_of_columns = FIX2INT(rb_iv_get(val, "@n"));
+
+    string_vector keys = string_vector();
+    for (i = 0; i < number_of_keys; i++) {
+      keys.append(std::string(RSTRING(RARRAY(names)->ptr[i])->ptr));
+    }
+    
+    Octave_map struct_matrix = Octave_map(dim_vector(number_of_rows, number_of_columns), Cell(keys));
+
+    for (row_index = 0; row_index < number_of_rows; row_index++) {
+      row = RARRAY(cells)->ptr[row_index];
+    
+      for (column_index = 0; column_index < number_of_columns; column_index++) {
+        cell = RARRAY(row)->ptr[column_index];
+        
+        for (i = 0; i < number_of_keys; i++) {
+          struct_matrix.contents(std::string(RSTRING(RARRAY(names)->ptr[i])->ptr))(row_index, column_index) = toOctaveValue(rb_hash_aref(cell, rb_str_new2(RSTRING(RARRAY(names)->ptr[i])->ptr)));
+        }
+      }
+    }
+
+    octave_val = struct_matrix;
   } else if (rb_obj_is_kind_of(val, rb_path2class("Octave::Matrix")) == Qtrue) {
     int row_index, column_index;
     int number_of_rows = FIX2INT(rb_iv_get(val, "@m"));
@@ -178,8 +227,11 @@ octave_value toOctaveValue(VALUE val)
       
       for (column_index = 0; column_index < number_of_columns; column_index++) {
         cell = RARRAY(row)->ptr[column_index];
-        if (rb_obj_is_kind_of(cell, rb_path2class("Numeric")) == Qtrue) {
+        
+        if (rb_type(cell) == T_FLOAT) {
           matrix(row_index, column_index) = RFLOAT(cell)->value;
+        } else if (rb_type(cell) == T_FIXNUM) {
+          matrix(row_index, column_index) = FIX2LONG(cell);
         } else {
           matrix(row_index, column_index) = octave_NaN;
         }
