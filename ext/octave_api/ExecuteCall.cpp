@@ -45,6 +45,45 @@ VALUE toRubyValue(octave_value val)
      ruby_val = rb_str_new2(val.string_value().c_str());
    } else if (val.is_bool_type()) {
      ruby_val = (val.bool_value() ? Qtrue : Qfalse);
+   } else if (val.is_cell()) {
+     int i;
+     int number_of_rows = val.rows();
+     int number_of_columns = val.columns();
+     Cell cell = val.cell_value();
+     
+     if (number_of_rows == 1 && number_of_columns == 1) {
+       ruby_val = toRubyValue(cell(0));
+     } else if (number_of_rows == 1) {
+       ruby_val = rb_ary_new2(number_of_columns);
+       for (i = 0; i < number_of_columns; i++) {
+         rb_ary_push(ruby_val, toRubyValue(cell(i)));
+       }
+     } else if (number_of_columns == 1) {
+       ruby_val = rb_ary_new2(number_of_rows);
+       for (i = 0; i < number_of_rows; i++) {
+         rb_ary_push(ruby_val, toRubyValue(cell(i)));
+       }
+     } else {
+       VALUE argv[2];
+       argv[0] = INT2FIX(number_of_rows);
+       argv[1] = INT2FIX(number_of_columns);
+       ruby_val = rb_class_new_instance(2, argv, rb_path2class("Octave::CellMatrix"));
+       
+       int row_index, column_index = 0;
+       VALUE cells, row;
+       cells = rb_ary_new2(number_of_rows);
+       for (row_index = 0; row_index < number_of_rows; row_index++) {
+         row = rb_ary_new2(number_of_columns);
+
+         for (column_index = 0; column_index < number_of_columns; column_index++) {
+           rb_ary_push(row, toRubyValue(cell(row_index, column_index)));
+         }
+         
+         rb_ary_push(cells, row);
+       }
+       
+       rb_iv_set(ruby_val, "@cells", cells);
+     }
    } else if (val.is_real_matrix()) {
      Matrix matrix;
      MArray<double> values;
@@ -90,7 +129,7 @@ VALUE toRubyValue(octave_value val)
      
      number_of_values = values.length();
      ruby_val = rb_ary_new2(number_of_values);
-     for(i = 0; i < number_of_values; i++) {
+     for (i = 0; i < number_of_values; i++) {
        cell = values(i);
        if (xisnan(cell) || octave_is_NA(cell)) {
          rb_ary_push(ruby_val, Qnil);
@@ -126,10 +165,10 @@ VALUE toRubyValue(octave_value val)
        cells = rb_ary_new2(number_of_rows);
      
        int row_index, column_index;
-       for(row_index = 0; row_index < number_of_rows; row_index++) {
+       for (row_index = 0; row_index < number_of_rows; row_index++) {
          row = rb_ary_new2(number_of_columns);
        
-         for(column_index = 0; column_index < number_of_columns; column_index++) {
+         for (column_index = 0; column_index < number_of_columns; column_index++) {
            cell = rb_hash_new();
            for (i = 0; i < number_of_keys; i++) {
              rb_hash_aset(cell, rb_str_new2(keys[i].c_str()), toRubyValue(struct_matrix.contents(keys[i])(row_index, column_index)));
@@ -269,7 +308,7 @@ VALUE ExecuteCall(VALUE function_name, VALUE arguments)
   
   n = RARRAY(arguments)->len;
   
-  for(i = 0; i < n; i++) {
+  for (i = 0; i < n; i++) {
     argList(i) = toOctaveValue(RARRAY(arguments)->ptr[i]);
   }
   
