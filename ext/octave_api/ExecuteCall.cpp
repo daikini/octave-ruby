@@ -132,7 +132,7 @@ VALUE toRubyValue(octave_value val)
          for(column_index = 0; column_index < number_of_columns; column_index++) {
            cell = rb_hash_new();
            for (i = 0; i < number_of_keys; i++) {
-             rb_hash_aset(cell, rb_str_new2(keys[i].c_str()), toRubyValue(struct_matrix.contents(keys[i])(column_index, row_index)));
+             rb_hash_aset(cell, rb_str_new2(keys[i].c_str()), toRubyValue(struct_matrix.contents(keys[i])(row_index, column_index)));
            }
            rb_ary_push(row, cell);
          }
