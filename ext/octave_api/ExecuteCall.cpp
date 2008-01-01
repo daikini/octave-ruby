@@ -105,35 +105,43 @@ VALUE toRubyValue(octave_value val)
      int number_of_keys = keys.length();
      int number_of_rows = struct_matrix.rows();
      int number_of_columns = struct_matrix.columns();
-     int number_of_arguments_to_struct_matrix = number_of_keys + 2;
-     VALUE argv[number_of_arguments_to_struct_matrix];
-     VALUE cells, row, cell;
-     argv[0] = INT2FIX(number_of_rows);
-     argv[1] = INT2FIX(number_of_columns);
-     
      int i;
-     for (i = 0; i < number_of_keys; i++) {
-       argv[2 + i] = rb_str_new2(keys[i].c_str());
-     }
-     ruby_val = rb_class_new_instance(number_of_arguments_to_struct_matrix, argv, rb_path2class("Octave::StructMatrix"));
-     cells = rb_ary_new2(number_of_rows);
-     
-     int row_index, column_index;
-     for(row_index = 0; row_index < number_of_rows; row_index++) {
-       row = rb_ary_new2(number_of_columns);
-       
-       for(column_index = 0; column_index < number_of_columns; column_index++) {
-         cell = rb_hash_new();
-         for (i = 0; i < number_of_keys; i++) {
-           rb_hash_aset(cell, rb_str_new2(keys[i].c_str()), toRubyValue(struct_matrix.contents(keys[i])(0)));
-         }
-         rb_ary_push(row, cell);
+     VALUE cells, row, cell;
+
+     if (number_of_rows == 1 && number_of_columns == 1) {
+       ruby_val = rb_hash_new();
+       for (i = 0; i < number_of_keys; i++) {
+         rb_hash_aset(ruby_val, rb_str_new2(keys[i].c_str()), toRubyValue(struct_matrix.contents(keys[i])(0)));
        }
-       
-       rb_ary_push(cells, row);
-     }
+     } else {
+       int number_of_arguments_to_struct_matrix = number_of_keys + 2;
+       VALUE argv[number_of_arguments_to_struct_matrix];
+       argv[0] = INT2FIX(number_of_rows);
+       argv[1] = INT2FIX(number_of_columns);
      
-     rb_iv_set(ruby_val, "@cells", cells);
+       for (i = 0; i < number_of_keys; i++) {
+         argv[2 + i] = rb_str_new2(keys[i].c_str());
+       }
+       ruby_val = rb_class_new_instance(number_of_arguments_to_struct_matrix, argv, rb_path2class("Octave::StructMatrix"));
+       cells = rb_ary_new2(number_of_rows);
+     
+       int row_index, column_index;
+       for(row_index = 0; row_index < number_of_rows; row_index++) {
+         row = rb_ary_new2(number_of_columns);
+       
+         for(column_index = 0; column_index < number_of_columns; column_index++) {
+           cell = rb_hash_new();
+           for (i = 0; i < number_of_keys; i++) {
+             rb_hash_aset(cell, rb_str_new2(keys[i].c_str()), toRubyValue(struct_matrix.contents(keys[i])(column_index, row_index)));
+           }
+           rb_ary_push(row, cell);
+         }
+       
+         rb_ary_push(cells, row);
+       }
+     
+       rb_iv_set(ruby_val, "@cells", cells);
+     }
    } else if (val.is_numeric_type()) {
      ruby_val = rb_float_new(val.double_value());
    } else {
