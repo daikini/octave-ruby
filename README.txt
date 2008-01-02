@@ -24,7 +24,7 @@ A Ruby interface to the Octave interpreted language.
   20.times { |m| 400.times { |n| matrix[m, n] = rand } }
   engine.m = matrix
   
-  engine.eval "save '/tmp/20_x_400_matrix"
+  engine.save "/tmp/20_x_400_matrix"
 
 == REQUIREMENTS:
 
