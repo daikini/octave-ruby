@@ -24,7 +24,7 @@ module Octave
     def method_missing(method_id, *args)
       method_name = method_id.id2name
       
-      @driver.call(method_name, *args)
+      @driver.feval(method_name, *args)
     end
     
     private

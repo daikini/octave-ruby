@@ -6,8 +6,8 @@ end
 
 module Octave ; module Driver ; module Native
   class Driver
-    def call(function_name, *args)
-      API.Call function_name, args
+    def feval(function_name, *args)
+      API.feval function_name, args
     end
   end
 end ; end ; end

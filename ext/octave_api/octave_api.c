@@ -1,7 +1,6 @@
-// Include the Ruby headers and goodies
-#include "ruby.h"
-#include "ExecuteCall.h"
 #include "octave_api.h"
+#include "ruby.h"
+#include "octave-ruby.h"
 
 // Defining a space for information and references about the module to be stored internally
 VALUE OCTAVE_API = Qnil;
@@ -12,12 +11,12 @@ void Init_octave_api() {
   OCTAVE_API = rb_define_module_under(OCTAVE_API, "Driver");
   OCTAVE_API = rb_define_module_under(OCTAVE_API, "Native");
   OCTAVE_API = rb_define_module_under(OCTAVE_API, "API");
-  rb_define_module_function(OCTAVE_API, "Call", Call, 2);
+  rb_define_module_function(OCTAVE_API, "feval", feval, 2);
   
-  InitializeOctave();
+  initialize_octave();
 }
 
-VALUE Call(VALUE self, VALUE function_name, VALUE arguments)
+VALUE feval(VALUE self, VALUE function_name, VALUE arguments)
 {
-  return ExecuteCall(function_name, arguments);
+  return or_feval(function_name, arguments);
 }

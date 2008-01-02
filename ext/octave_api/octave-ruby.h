@@ -8,11 +8,8 @@ extern "C"
 {
 #endif
 
-/* Entry point */
-extern VALUE ExecuteCall(VALUE function_name, VALUE arguments);
-
-extern void InitializeOctave();
-extern void TerminateOctave();
+extern VALUE or_feval(VALUE function_name, VALUE arguments);
+extern void initialize_octave();
 
 #ifdef __cplusplus /* extern "C" */
 }

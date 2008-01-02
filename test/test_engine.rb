@@ -44,7 +44,7 @@ class EngineTest < Test::Unit::TestCase
   end
   
   def test_method_missing
-    @driver.expects(:call).with("some_method_name", "argument 1", "argument 2")
+    @driver.expects(:feval).with("some_method_name", "argument 1", "argument 2")
     @engine.some_method_name("argument 1", "argument 2")
   end
 end
