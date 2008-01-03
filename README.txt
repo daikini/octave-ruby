@@ -22,7 +22,7 @@ A Ruby interface to the Octave interpreted language.
   
   matrix = Octave::Matrix.new(20, 400)
   20.times { |m| 400.times { |n| matrix[m, n] = rand } }
-  engine.m = matrix
+  engine.put_variable("m", matrix)
   
   engine.save "/tmp/20_x_400_matrix"
 

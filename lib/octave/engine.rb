@@ -20,6 +20,16 @@ module Octave
       load_driver(options[:driver])
     end
     
+    # Put a variable in to Octave with the given name
+    def put_variable(name, value)
+      @driver.put_variable(name, value)
+    end
+    
+    # Retrieve a variable from Octave with the given name
+    def get_variable(name)
+      @driver.get_variable(name)
+    end
+    
     # Call the Octave function via a given name
     def method_missing(method_id, *args)
       method_name = method_id.id2name
