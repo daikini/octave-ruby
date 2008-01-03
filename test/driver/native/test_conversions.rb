@@ -56,7 +56,7 @@ class ConversionsTest < Test::Unit::TestCase
   def test_should_convert_hash
     assert_octave_and_ruby_equal "foo" => "bar"
     assert_octave_and_ruby_equal "foo" => [1,2,3]
-    assert_octave_and_ruby_equal "foo" => { "bar" => [1,2,3] }
+    assert_octave_and_ruby_equal "foo" => { "bar" => [1,2,3, [4,5,6]] }
   end
   
   def test_should_convert_octave_matrix
