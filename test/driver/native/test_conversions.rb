@@ -50,7 +50,7 @@ class ConversionsTest < Test::Unit::TestCase
   
   def test_should_convert_array
     assert_octave_and_ruby_equal [1, nil, 3.0]
-    assert_octave_and_ruby_equal [1, "2", false]
+    assert_octave_and_ruby_equal [1, "2", false, ["foo", "bar", "baz"]]
   end
   
   def test_should_convert_hash

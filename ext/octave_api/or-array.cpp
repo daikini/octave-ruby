@@ -6,15 +6,14 @@ OR_Array::~OR_Array() {}
 octave_value OR_Array::to_octave()
 {
   int row_index;
-  VALUE values = rb_funcall(ruby_val, rb_intern("flatten"), 0);
-  int number_of_rows = RARRAY(values)->len;
+  int number_of_rows = RARRAY(ruby_val)->len;
   VALUE cell;
   
   if (should_convert_to_cell_matrix()) {
     Cell matrix = Cell(number_of_rows, 1);
     
     for (row_index = 0; row_index < number_of_rows; row_index++) {
-      cell = RARRAY(values)->ptr[row_index];
+      cell = RARRAY(ruby_val)->ptr[row_index];
       matrix(row_index, 0) = OR_Variable(cell).to_octave();
     }
     
@@ -23,7 +22,7 @@ octave_value OR_Array::to_octave()
     Matrix matrix = Matrix(number_of_rows, 1);
     
     for (row_index = 0; row_index < number_of_rows; row_index++) {
-      cell = RARRAY(values)->ptr[row_index];
+      cell = RARRAY(ruby_val)->ptr[row_index];
 
       if (rb_type(cell) == T_FLOAT) {
         matrix(row_index, 0) = RFLOAT(cell)->value;
@@ -41,13 +40,12 @@ octave_value OR_Array::to_octave()
 bool OR_Array::should_convert_to_cell_matrix()
 {
   int row_index;
-  VALUE values = rb_funcall(ruby_val, rb_intern("flatten"), 0);
   VALUE value;
   VALUE type;
-  int number_of_rows = RARRAY(values)->len;
+  int number_of_rows = RARRAY(ruby_val)->len;
 
   for (row_index = 0; row_index < number_of_rows; row_index++) {
-    value = RARRAY(values)->ptr[row_index];
+    value = RARRAY(ruby_val)->ptr[row_index];
     type = rb_type(value);
     if (type != T_FLOAT && type != T_FIXNUM && value != Qnil) {
       return true;
