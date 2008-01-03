@@ -42,12 +42,14 @@ bool OR_Array::should_convert_to_cell_matrix()
 {
   int row_index;
   VALUE values = rb_funcall(ruby_val, rb_intern("flatten"), 0);
+  VALUE value;
   VALUE type;
   int number_of_rows = RARRAY(values)->len;
 
   for (row_index = 0; row_index < number_of_rows; row_index++) {
-    type = rb_type(RARRAY(values)->ptr[row_index]);
-    if (type != T_FLOAT && type != T_FIXNUM) {
+    value = RARRAY(values)->ptr[row_index];
+    type = rb_type(value);
+    if (type != T_FLOAT && type != T_FIXNUM && value != Qnil) {
       return true;
     }
   }
