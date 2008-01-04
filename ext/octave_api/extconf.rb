@@ -4,7 +4,6 @@ require 'mkmf'
 octave_dirs = dir_config( "octave", "/usr/local/octave/include", "/usr/local/octave/lib" )
 dep_dirs = dir_config( "dep", "/usr/local/include", "/usr/local/lib" )
 if have_header("octave.h" ) &&
-  have_library("z") &&
   have_library("octinterp", "octave_main" ) &&
   have_library("octave") &&
   have_library("cruft")
