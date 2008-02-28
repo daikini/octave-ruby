@@ -1,6 +1,6 @@
 == 1.0.2 / 2008-02-28
 
-* 2 minor enhancement
+* 1 minor enhancement
   * Added block usage to Octave::Engine.new
   
   
