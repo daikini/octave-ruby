@@ -1,3 +1,10 @@
+== 1.0.1 / 2008-02-28
+
+* 2 major bug fixes
+  * Ruby hashes with more than 1 key are converted to Octave properly
+  * Octave struct matrices with more than 1 key are converted to Ruby properly
+  
+  
 == 1.0.0 / 2008-01-02
 
 * 1 major enhancement

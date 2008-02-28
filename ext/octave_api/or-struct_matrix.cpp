@@ -13,10 +13,10 @@ VALUE OR_StructMatrix::to_ruby()
   int i;
   VALUE cells, row, cell;
 
-  if (number_of_rows == 1 && number_of_columns == 1) {
+  if (number_of_columns == 1) {
     ruby_val = rb_hash_new();
     for (i = 0; i < number_of_keys; i++) {
-      rb_hash_aset(ruby_val, rb_str_new2(keys[i].c_str()), OR_Variable(struct_matrix.contents(keys[i])(0)).to_ruby());
+      rb_hash_aset(ruby_val, rb_str_new2(keys[i].c_str()), OR_Variable(struct_matrix.contents(keys[i])(i)).to_ruby());
     }
   } else {
     int number_of_arguments_to_struct_matrix = number_of_keys + 2;

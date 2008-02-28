@@ -57,6 +57,7 @@ class ConversionsTest < Test::Unit::TestCase
     assert_octave_and_ruby_equal "foo" => "bar"
     assert_octave_and_ruby_equal "foo" => [1,2,3]
     assert_octave_and_ruby_equal "foo" => { "bar" => [1,2,3, [4,5,6]] }
+    assert_octave_and_ruby_equal "foo" => { "bar" => [1,2,3, [4,5,6]], "baz" => "buz" }
   end
   
   def test_should_convert_octave_matrix
@@ -94,16 +95,13 @@ class ConversionsTest < Test::Unit::TestCase
   end
   
   def test_should_convert_octave_struct_matrix
-    cats = Octave::StructMatrix.new(17, 1, "name")
-    17.times { |m| 1.times { |n| cats[m, n]["name"] = "Kitty #{m}.#{n}" } }
-    
-    struct_matrix = Octave::StructMatrix.new(17, 1, "name", "age", "married", "cats", "car")
+    struct_matrix = Octave::StructMatrix.new(17, 2, "name", "age", "married", "cats", "car")
     17.times do |m|
-      1.times do |n|
+      2.times do |n|
         struct_matrix[m, n]["name"] = "Bob #{m}.#{n}"
         struct_matrix[m, n]["age"] = (rand * 100).to_i
         struct_matrix[m, n]["married"] = (rand > 0.5)
-        struct_matrix[m, n]["cats"] = cats
+        struct_matrix[m, n]["cats"] = { "name" => "Kitty #{m}.#{n}" }
         struct_matrix[m, n]["car"] = nil
       end
     end
