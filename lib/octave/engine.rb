@@ -18,6 +18,14 @@ module Octave
     # Create a new Engine object that connects to Octave
     def initialize(options = {})
       load_driver(options[:driver])
+      
+      if block_given?
+        begin
+          yield self
+        ensure
+          close
+        end
+      end
     end
     
     # Put a variable in to Octave with the given name

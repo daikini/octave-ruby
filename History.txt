@@ -1,3 +1,9 @@
+== 1.0.2 / 2008-02-28
+
+* 2 minor enhancement
+  * Added block usage to Octave::Engine.new
+  
+  
 == 1.0.1 / 2008-02-28
 
 * 2 major bug fixes
