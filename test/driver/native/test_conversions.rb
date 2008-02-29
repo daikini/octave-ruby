@@ -110,17 +110,6 @@ class ConversionsTest < Test::Unit::TestCase
     assert_octave_and_ruby_equal struct_matrix
   end
   
-  def test_should_convert_a_nx1_struct_matrix_to_a_hash
-    struct_matrix = Octave::StructMatrix.new(2, 1, "foo")
-    struct_matrix[0,0]["foo"] = { "bar" => [1,2,3] }
-    
-    expected_hash = { "foo"=> [ {"bar" => [1.0, 2.0, 3.0] }, nil] }
-    result = to_octave_to_ruby(struct_matrix)
-    
-    assert_equal expected_hash, result
-    assert_instance_of Hash, result
-  end
-  
   def test_should_convert_a_1x1_struct_matrix_to_a_hash
     struct_matrix = Octave::StructMatrix.new(1, 1, "foo")
     struct_matrix[0,0]["foo"] = { "bar" => [1,2,3] }
