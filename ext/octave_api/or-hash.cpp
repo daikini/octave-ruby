@@ -14,9 +14,9 @@ octave_value OR_Hash::to_octave()
     keys.append(std::string(RSTRING(RARRAY(names)->ptr[i])->ptr));
   }
 
-  Octave_map struct_matrix = Octave_map(dim_vector(number_of_keys, 1), Cell(keys));
+  Octave_map struct_matrix = Octave_map(dim_vector(0, 1), Cell(keys));
   for (i = 0; i < number_of_keys; i++) {
-    struct_matrix.contents(std::string(RSTRING(RARRAY(names)->ptr[i])->ptr))(i, 0) = OR_Variable(rb_hash_aref(ruby_val, rb_str_new2(RSTRING(RARRAY(names)->ptr[i])->ptr))).to_octave();
+    struct_matrix.contents(std::string(RSTRING(RARRAY(names)->ptr[i])->ptr)) = OR_Variable(rb_hash_aref(ruby_val, rb_str_new2(RSTRING(RARRAY(names)->ptr[i])->ptr))).to_octave();
   }
 
   return struct_matrix;

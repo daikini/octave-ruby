@@ -4,6 +4,7 @@ require 'octave'
 require 'octave/driver/native/driver'
 require 'rubygems'
 require 'mocha'
+require 'yaml'
 
 class ConversionsTest < Test::Unit::TestCase
   def setup
@@ -57,7 +58,7 @@ class ConversionsTest < Test::Unit::TestCase
     assert_octave_and_ruby_equal "foo" => "bar"
     assert_octave_and_ruby_equal "foo" => [1,2,3]
     assert_octave_and_ruby_equal "foo" => { "bar" => [1,2,3, [4,5,6]] }
-    assert_octave_and_ruby_equal "foo" => { "bar" => [1,2,3, [4,5,6]], "baz" => "buz" }
+    assert_octave_and_ruby_equal "foo" => { "bar" => [1,2,3, [4,5,6]], "baz" => "buz", "bob" => [7,8,9] }
   end
   
   def test_should_convert_octave_matrix
@@ -107,6 +108,17 @@ class ConversionsTest < Test::Unit::TestCase
     end
     
     assert_octave_and_ruby_equal struct_matrix
+  end
+  
+  def test_should_convert_a_nx1_struct_matrix_to_a_hash
+    struct_matrix = Octave::StructMatrix.new(2, 1, "foo")
+    struct_matrix[0,0]["foo"] = { "bar" => [1,2,3] }
+    
+    expected_hash = { "foo"=> [ {"bar" => [1.0, 2.0, 3.0] }, nil] }
+    result = to_octave_to_ruby(struct_matrix)
+    
+    assert_equal expected_hash, result
+    assert_instance_of Hash, result
   end
   
   def test_should_convert_a_1x1_struct_matrix_to_a_hash
