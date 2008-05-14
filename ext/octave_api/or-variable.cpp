@@ -1,6 +1,7 @@
 #include "or-variable.h"
 #include "or-string.h"
 #include "or-matrix.h"
+#include "or-boolean_matrix.h"
 #include "or-struct_matrix.h"
 #include "or-cell_matrix.h"
 #include "or-array.h"
@@ -12,6 +13,8 @@ VALUE OR_Variable::to_ruby()
 {
   if (octave_val.is_string()) {
     return OR_String(octave_val).to_ruby();
+  } else if (octave_val.is_bool_matrix()) {
+    return OR_BooleanMatrix(octave_val).to_ruby();
   } else if (octave_val.is_bool_type()) {
     return (octave_val.bool_value() ? Qtrue : Qfalse);
   } else if (octave_val.is_cell()) {

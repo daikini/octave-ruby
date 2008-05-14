@@ -1,3 +1,8 @@
+== 1.0.4 / 2008-05-14
+
+* 1 minor enhancement
+  * Added support for boolean matrices
+
 == 1.0.3 / 2008-02-29
 
 * 1 major bug fix

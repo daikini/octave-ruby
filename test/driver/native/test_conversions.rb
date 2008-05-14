@@ -154,4 +154,10 @@ class ConversionsTest < Test::Unit::TestCase
     
     assert_equal %w(foo bar baz), to_octave_to_ruby(cell_matrix)
   end
+  
+  def test_should_convert_boolean_matrix
+    assert_octave_and_ruby_equal [true, false, true]
+    boolean_matrix = @driver.feval "eval", "x = [1,2]; (x > 2 | x < 2)"
+    assert_equal [true, false], boolean_matrix
+  end
 end

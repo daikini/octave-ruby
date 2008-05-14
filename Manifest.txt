@@ -13,6 +13,8 @@ ext/octave_api/octave_api.c
 ext/octave_api/octave_api.h
 ext/octave_api/or-array.cpp
 ext/octave_api/or-array.h
+ext/octave_api/or-boolean_matrix.cpp
+ext/octave_api/or-boolean_matrix.h
 ext/octave_api/or-cell_matrix.cpp
 ext/octave_api/or-cell_matrix.h
 ext/octave_api/or-hash.cpp

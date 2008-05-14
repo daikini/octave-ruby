@@ -43,7 +43,7 @@ LIBRUBYARG_STATIC = -l$(RUBY_SO_NAME)
 RUBY_EXTCONF_H = 
 CFLAGS   =  -fno-common -arch i386 -Os -pipe -fno-common 
 INCFLAGS = -I. -I. -I/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin9.0 -I.
-CPPFLAGS = -DHAVE_OCTAVE_H -I/Applications/Octave.app/Contents/Resources/include -I/Applications/Octave.app/Contents/Resources/lib -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.0/octave -I/Applications/Octave.app/Contents/Resources/lib/octave-3.0.0 -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.0
+CPPFLAGS = -DHAVE_OCTAVE_H -I/Applications/Octave.app/Contents/Resources/include -I/Applications/Octave.app/Contents/Resources/lib -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.1/octave -I/Applications/Octave.app/Contents/Resources/lib/octave-3.0.1 -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.1
 CXXFLAGS = $(CFLAGS) 
 DLDFLAGS = -L. -arch i386  
 LDSHARED = g++ -pipe -bundle
@@ -68,8 +68,8 @@ COPY = cp
 
 preload = 
 
-libpath = . $(libdir) /Applications/Octave.app/Contents/Resources/lib /Applications/Octave.app/Contents/Resources/lib/octave-3.0.0
-LIBPATH =  -L"." -L"$(libdir)" -L"/Applications/Octave.app/Contents/Resources/lib" -L"/Applications/Octave.app/Contents/Resources/lib/octave-3.0.0"
+libpath = . $(libdir) /Applications/Octave.app/Contents/Resources/lib /Applications/Octave.app/Contents/Resources/lib/octave-3.0.1
+LIBPATH =  -L"." -L"$(libdir)" -L"/Applications/Octave.app/Contents/Resources/lib" -L"/Applications/Octave.app/Contents/Resources/lib/octave-3.0.1"
 DEFFILE = 
 
 CLEANFILES = mkmf.log
@@ -79,9 +79,9 @@ extout =
 extout_prefix = 
 target_prefix = 
 LOCAL_LIBS = 
-LIBS = $(LIBRUBYARG_SHARED) -lz -lcruft -loctave -loctinterp  -lpthread -ldl -lm  
-SRCS = octave_api.c octave-ruby.cpp or-array.cpp or-cell_matrix.cpp or-hash.cpp or-matrix.cpp or-string.cpp or-struct_matrix.cpp or-variable.cpp
-OBJS = octave_api.o octave-ruby.o or-array.o or-cell_matrix.o or-hash.o or-matrix.o or-string.o or-struct_matrix.o or-variable.o
+LIBS = $(LIBRUBYARG_SHARED) -lcruft -loctave -loctinterp  -lpthread -ldl -lm  
+SRCS = octave_api.c octave-ruby.cpp or-array.cpp or-boolean_matrix.cpp or-cell_matrix.cpp or-hash.cpp or-matrix.cpp or-string.cpp or-struct_matrix.cpp or-variable.cpp
+OBJS = octave_api.o octave-ruby.o or-array.o or-boolean_matrix.o or-cell_matrix.o or-hash.o or-matrix.o or-string.o or-struct_matrix.o or-variable.o
 TARGET = octave_api
 DLLIB = $(TARGET).bundle
 EXTSTATIC = 
