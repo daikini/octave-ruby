@@ -69,6 +69,11 @@ class ConversionsTest < Test::Unit::TestCase
     assert_octave_and_ruby_equal matrix
   end
   
+  def test_should_convert_a_0x0_octave_matrix
+    matrix = Octave::Matrix.new(0, 0)
+    assert_octave_and_ruby_equal matrix
+  end
+  
   def test_should_convert_a_1xn_octave_matrix_to_an_array
     matrix = Octave::Matrix.new(1, 3)
     matrix[0, 0] = 1
