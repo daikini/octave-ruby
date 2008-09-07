@@ -69,9 +69,18 @@ class ConversionsTest < Test::Unit::TestCase
     assert_octave_and_ruby_equal matrix
   end
   
-  def test_should_convert_a_0x0_octave_matrix
+  def test_should_convert_a_0x0_octave_matrix_to_an_empty_array
     matrix = Octave::Matrix.new(0, 0)
-    assert_octave_and_ruby_equal matrix
+    
+    expected_array = []
+    result = to_octave_to_ruby(matrix)
+    
+    assert_equal expected_array, result
+    assert_instance_of Array, result
+  end
+  
+  def test_should_convert_an_empty_ruby_array
+    assert_octave_and_ruby_equal []
   end
   
   def test_should_convert_a_1xn_octave_matrix_to_an_array
