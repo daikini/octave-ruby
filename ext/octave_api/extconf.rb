@@ -2,12 +2,12 @@
 require 'mkmf'
 
 octave_dirs = dir_config( "octave", "/usr/local/octave/include", "/usr/local/octave/lib" )
-dep_dirs = dir_config( "dep", "/usr/local/include", "/usr/local/lib" )
-if have_header("octave.h" ) &&
-  have_library("octinterp", "octave_main" ) &&
-  have_library("octave") &&
-  have_library("cruft")
+dep_dirs = dir_config( "dep", octave_dirs.first.split(File::SEPARATOR)[0..-3].join(File::SEPARATOR), octave_dirs.last.split(File::SEPARATOR)[0..-2].join(File::SEPARATOR) )
 
+if have_header("octave.h" ) &&
+  have_library("octave") &&
+  have_library("cruft") &&
+  have_library("octinterp", "octave_main" )
   
   if Config::CONFIG["arch"] =~ /-darwin\d/
     CONFIG['LDSHARED'] = "g++ -pipe -bundle"

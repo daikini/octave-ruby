@@ -1,0 +1,3 @@
+ext/octave_api/*.log
+ext/octave_api/*.o
+ext/octave_api/*.bundle
