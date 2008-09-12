@@ -18,6 +18,12 @@ if have_header("octave.h" ) &&
     end
   else
     CONFIG['LDSHARED'] = "g++ -shared"
+    if octave_dirs.any?
+      octave_dirs << File.dirname(octave_dirs.first)
+      octave_dirs << "/usr/local/include"
+      octave_includes = (dep_dirs + octave_dirs).collect { |dir| "-I#{dir}" }.join(" ")
+      with_cppflags(octave_includes) { true }
+    end
   end
   
   create_makefile( "octave_api" )
