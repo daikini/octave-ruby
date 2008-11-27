@@ -49,16 +49,34 @@ class ConversionsTest < Test::Unit::TestCase
     assert_instance_of Float, result
   end
   
-  def test_should_convert_array
+  def test_should_convert_array_from_and_to
     assert_octave_and_ruby_equal [1, nil, 3.0]
     assert_octave_and_ruby_equal [1, "2", false, ["foo", "bar", "baz"]]
   end
   
-  def test_should_convert_hash
+  def test_should_convert_hash_from_and_to
     assert_octave_and_ruby_equal "foo" => "bar"
     assert_octave_and_ruby_equal "foo" => [1,2,3]
     assert_octave_and_ruby_equal "foo" => { "bar" => [1,2,3, [4,5,6]] }
     assert_octave_and_ruby_equal "foo" => { "bar" => [1,2,3, [4,5,6]], "baz" => "buz", "bob" => [7,8,9] }
+  end
+  
+  def test_should_be_able_to_reference_structure_fields_from_hash
+    hash = { "foo" => { "bar" => [1,2,3, [4,5,6]] }, "baz" => { "buz" => [7,8,9] } }
+    @driver.put_variable "hash", hash
+    assert_equal hash["foo"]["bar"], @driver.feval("eval", "hash.foo.bar")
+    assert_equal hash["baz"]["buz"], @driver.feval("eval", "hash.baz.buz")
+  end
+  
+  def test_should_be_able_to_reference_structure_fields_from_octave_struct_matrix
+    bar_matrix = Octave::StructMatrix.new(1, 1, "bar")
+    bar_matrix[0,0]["bar"] = [1,2,3, [4,5,6]]
+    
+    struct_matrix = Octave::StructMatrix.new(1, 1, "foo")
+    struct_matrix[0,0]["foo"] = bar_matrix
+    
+    @driver.put_variable "struct_matrix", struct_matrix
+    assert_equal [1,2,3, [4,5,6]], @driver.feval("eval", "struct_matrix.foo.bar")
   end
   
   def test_should_convert_octave_matrix

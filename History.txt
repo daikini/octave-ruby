@@ -1,3 +1,8 @@
+== 1.0.8 / 2008-11-26
+
+* 1 major bug fix
+  * Hashes are now converted to octave properly
+  
 == 1.0.7 / 2008-09-12
 
 * 1 minor enhancement

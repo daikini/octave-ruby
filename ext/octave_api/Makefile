@@ -43,7 +43,7 @@ LIBRUBYARG_STATIC = -l$(RUBY_SO_NAME)
 RUBY_EXTCONF_H = 
 CFLAGS   =  -fno-common -arch i386 -Os -pipe -fno-common 
 INCFLAGS = -I. -I. -I/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin9.0 -I.
-CPPFLAGS = -DHAVE_OCTAVE_H -I/Applications/Octave.app/Contents/Resources/include -I/Applications/Octave.app/Contents/Resources/lib -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.1/octave -I/Applications/Octave.app/Contents/Resources/lib/octave-3.0.1 -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.1
+CPPFLAGS = -DHAVE_OCTAVE_H -I/Applications/Octave.app/Contents/Resources/include -I/Applications/Octave.app/Contents/Resources/lib -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.2/octave -I/Applications/Octave.app/Contents/Resources/lib/octave-3.0.2 -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.2
 CXXFLAGS = $(CFLAGS) 
 DLDFLAGS = -L. -arch i386  
 LDSHARED = g++ -pipe -bundle
@@ -68,8 +68,8 @@ COPY = cp
 
 preload = 
 
-libpath = . $(libdir) /Applications/Octave.app/Contents/Resources/lib /Applications/Octave.app/Contents/Resources/lib/octave-3.0.1
-LIBPATH =  -L"." -L"$(libdir)" -L"/Applications/Octave.app/Contents/Resources/lib" -L"/Applications/Octave.app/Contents/Resources/lib/octave-3.0.1"
+libpath = . $(libdir) /Applications/Octave.app/Contents/Resources/lib /Applications/Octave.app/Contents/Resources/lib/octave-3.0.2
+LIBPATH =  -L"." -L"$(libdir)" -L"/Applications/Octave.app/Contents/Resources/lib" -L"/Applications/Octave.app/Contents/Resources/lib/octave-3.0.2"
 DEFFILE = 
 
 CLEANFILES = mkmf.log
