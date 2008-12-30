@@ -109,9 +109,12 @@ class ConversionsTest < Test::Unit::TestCase
     
     expected_array = [1,2,3]
     result = to_octave_to_ruby(matrix)
-    
+
     assert_equal expected_array, result
     assert_instance_of Array, result
+    assert_equal 1, @driver.feval("rows", matrix)
+    assert_equal 3, @driver.feval("columns", matrix)
+    assert_equal [1, 3], @driver.feval("size", matrix)
   end
   
   def test_should_convert_an_nx1_octave_matrix_to_an_array
@@ -125,6 +128,9 @@ class ConversionsTest < Test::Unit::TestCase
     
     assert_equal expected_array, result
     assert_instance_of Array, result
+    assert_equal 3, @driver.feval("rows", matrix)
+    assert_equal 1, @driver.feval("columns", matrix)
+    assert_equal [3, 1], @driver.feval("size", matrix)
   end
   
   def test_should_convert_octave_struct_matrix
