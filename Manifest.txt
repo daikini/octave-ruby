@@ -32,6 +32,7 @@ lib/octave/driver/native/driver.rb
 lib/octave/engine.rb
 lib/octave/matrix.rb
 lib/octave/version.rb
+octave-ruby.gemspec
 setup.rb
 test/driver/native/test_conversions.rb
 test/driver/native/test_driver.rb

@@ -1,6 +1,6 @@
 octave-ruby
     http://octave-ruby.rubyforge.org/
-    jonathan.younger@lipomics.com
+    jonathan@daikini.com
     A big thank you to Lipomics Technologies, Inc. http://www.lipomics.com for sponsoring this project.
     
 == DESCRIPTION:
