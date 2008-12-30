@@ -16,8 +16,6 @@ VALUE OR_Matrix::to_ruby()
   
   if ((number_of_rows == 0) && (number_of_columns == 0)) {
     return rb_ary_new2(0);
-  } else if (number_of_rows == 1) {
-    values = matrix.row(0);
   } else if (number_of_columns == 1) {
     values = matrix.column(0);
   } else {

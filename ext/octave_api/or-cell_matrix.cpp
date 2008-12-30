@@ -12,8 +12,6 @@ VALUE OR_CellMatrix::to_ruby()
   
   if (number_of_rows == 1 && number_of_columns == 1) {
     return OR_Variable(cell(0)).to_ruby();
-  } else if (number_of_rows == 1) {
-    number_of_values = number_of_columns;
   } else if (number_of_columns == 1) {
     number_of_values = number_of_rows;
   } else {

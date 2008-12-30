@@ -101,20 +101,18 @@ class ConversionsTest < Test::Unit::TestCase
     assert_octave_and_ruby_equal []
   end
   
-  def test_should_convert_a_1xn_octave_matrix_to_an_array
+  def test_should_convert_a_1xn_octave_matrix_to_an_octave_matrix
     matrix = Octave::Matrix.new(1, 3)
     matrix[0, 0] = 1
     matrix[0, 1] = 2
     matrix[0, 2] = 3
     
-    expected_array = [1,2,3]
-    result = to_octave_to_ruby(matrix)
+    result = @driver.put_variable "octave_matrix", matrix
 
-    assert_equal expected_array, result
-    assert_instance_of Array, result
-    assert_equal 1, @driver.feval("rows", matrix)
-    assert_equal 3, @driver.feval("columns", matrix)
-    assert_equal [1, 3], @driver.feval("size", matrix)
+    assert_instance_of Octave::Matrix, result
+    assert_equal matrix, result
+    assert_equal 1, @driver.feval("rows", result)
+    assert_equal 3, @driver.feval("columns", result)
   end
   
   def test_should_convert_an_nx1_octave_matrix_to_an_array
@@ -128,9 +126,8 @@ class ConversionsTest < Test::Unit::TestCase
     
     assert_equal expected_array, result
     assert_instance_of Array, result
-    assert_equal 3, @driver.feval("rows", matrix)
-    assert_equal 1, @driver.feval("columns", matrix)
-    assert_equal [3, 1], @driver.feval("size", matrix)
+    assert_equal 3, @driver.feval("rows", result)
+    assert_equal 1, @driver.feval("columns", result)
   end
   
   def test_should_convert_octave_struct_matrix
@@ -175,13 +172,18 @@ class ConversionsTest < Test::Unit::TestCase
     assert_equal [1, 2, 3], to_octave_to_ruby(cell_matrix)
   end
   
-  def test_should_convert_a_1xn_cell_matrix_to_an_array
+  def test_should_convert_a_1xn_cell_matrix_to_an_octave_cell_matrix
     cell_matrix = Octave::CellMatrix.new(1, 3)
     cell_matrix[0,0] = "foo"
     cell_matrix[0,1] = "bar"
     cell_matrix[0,2] = "baz"
     
-    assert_equal %w(foo bar baz), to_octave_to_ruby(cell_matrix)
+    result = @driver.put_variable "octave_cell_matrix", cell_matrix
+
+    assert_instance_of Octave::CellMatrix, result
+    assert_equal cell_matrix, result
+    assert_equal 1, @driver.feval("rows", result)
+    assert_equal 3, @driver.feval("columns", result)
   end
   
   def test_should_convert_a_nx1_cell_matrix_to_an_array
