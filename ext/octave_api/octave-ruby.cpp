@@ -26,10 +26,10 @@ VALUE or_feval(VALUE function_name, VALUE arguments)
   int i, n;
   octave_value_list argList;
   
-  n = RARRAY(arguments)->len;
+  n = RARRAY_LEN(arguments);
   
   for (i = 0; i < n; i++) {
-    argList(i) = OR_Variable(RARRAY(arguments)->ptr[i]).to_octave();
+    argList(i) = OR_Variable(RARRAY_PTR(arguments)[i]).to_octave();
   }
   
   if (octave_set_current_context) {
@@ -44,7 +44,7 @@ VALUE or_feval(VALUE function_name, VALUE arguments)
     symbol_table::set_scope(symbol_table::top_scope());
     reset_error_handler();
     
-    octave_value_list val = feval(std::string(RSTRING(function_name)->ptr), argList, 1);
+    octave_value_list val = feval(std::string(RSTRING_PTR(function_name)), argList, 1);
     if(val.length() > 0 && val(0).is_defined()) {
       ruby_val = OR_Variable(val(0)).to_ruby();
     }
@@ -63,11 +63,11 @@ VALUE or_feval(VALUE function_name, VALUE arguments)
 
 extern VALUE or_get_variable(VALUE variable_name)
 {
-  return OR_Variable(get_top_level_value(std::string(RSTRING(variable_name)->ptr))).to_ruby();
+  return OR_Variable(get_top_level_value(std::string(RSTRING_PTR(variable_name)))).to_ruby();
 }
 
 extern VALUE or_put_variable(VALUE variable_name, VALUE value)
 {
-  set_top_level_value(std::string(RSTRING(variable_name)->ptr), OR_Variable(value).to_octave());
+  set_top_level_value(std::string(RSTRING_PTR(variable_name)), OR_Variable(value).to_octave());
   return value;
 }

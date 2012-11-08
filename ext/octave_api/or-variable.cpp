@@ -39,7 +39,7 @@ octave_value OR_Variable::to_octave()
   } else if (ruby_val == Qnil) {
     return octave_NaN;
   } else if (rb_type(ruby_val) == T_FLOAT) {
-    return RFLOAT(ruby_val)->value;
+    return RFLOAT_VALUE(ruby_val);
   } else if (rb_type(ruby_val) == T_FIXNUM) {
     return FIX2LONG(ruby_val);
   } else if (rb_obj_is_kind_of(ruby_val, rb_path2class("Array")) == Qtrue) {

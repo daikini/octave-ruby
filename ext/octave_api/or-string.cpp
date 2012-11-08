@@ -9,5 +9,5 @@ VALUE OR_String::to_ruby()
 
 octave_value OR_String::to_octave()
 {
-  return std::string(RSTRING(ruby_val)->ptr);
+  return std::string(RSTRING_PTR(ruby_val));
 }

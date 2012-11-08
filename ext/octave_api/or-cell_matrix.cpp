@@ -54,10 +54,10 @@ octave_value OR_CellMatrix::to_octave()
   Cell matrix = Cell(number_of_rows, number_of_columns);
   
   for (row_index = 0; row_index < number_of_rows; row_index++) {
-    row = RARRAY(cells)->ptr[row_index];
+    row = RARRAY_PTR(cells)[row_index];
     
     for (column_index = 0; column_index < number_of_columns; column_index++) {
-      cell = RARRAY(row)->ptr[column_index];
+      cell = RARRAY_PTR(row)[column_index];
       matrix(row_index, column_index) = OR_Variable(cell).to_octave();
     }
   }

@@ -1,70 +1,98 @@
 
 SHELL = /bin/sh
 
+# V=0 quiet, V=1 verbose.  other values don't work.
+V = 0
+Q1 = $(V:1=)
+Q = $(Q1:0=@)
+n=$(NULLCMD)
+ECHO1 = $(V:1=@$n)
+ECHO = $(ECHO1:0=@echo)
+
 #### Start of system configuration section. ####
 
 srcdir = /Volumes/MacintoshHD/Projects/Daikini/octave-ruby/ext/octave_api
-topdir = /System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin12.0
-hdrdir = $(topdir)
-VPATH = $(srcdir):$(topdir):$(hdrdir)
-prefix = $(DESTDIR)/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr
+topdir = /Users/jonathan/.rbenv/versions/1.9.3-p286/include/ruby-1.9.1
+hdrdir = /Users/jonathan/.rbenv/versions/1.9.3-p286/include/ruby-1.9.1
+arch_hdrdir = /Users/jonathan/.rbenv/versions/1.9.3-p286/include/ruby-1.9.1/$(arch)
+VPATH = $(srcdir):$(arch_hdrdir)/ruby:$(hdrdir)/ruby
+prefix = $(DESTDIR)/Users/jonathan/.rbenv/versions/1.9.3-p286
+rubylibprefix = $(libdir)/$(RUBY_BASE_NAME)
 exec_prefix = $(prefix)
-sitearchdir = $(sitelibdir)/$(sitearch)
-libexecdir = $(exec_prefix)/libexec
+vendorhdrdir = $(rubyhdrdir)/vendor_ruby
+sitehdrdir = $(rubyhdrdir)/site_ruby
+rubyhdrdir = $(includedir)/$(RUBY_BASE_NAME)-$(ruby_version)
+vendordir = $(rubylibprefix)/vendor_ruby
+sitedir = $(rubylibprefix)/site_ruby
+ridir = $(datarootdir)/$(RI_BASE_NAME)
+mandir = $(datarootdir)/man
 localedir = $(datarootdir)/locale
-oldincludedir = $(DESTDIR)/usr/include
-infodir = $(DESTDIR)/usr/share/info
-archdir = $(rubylibdir)/$(arch)
-datadir = $(datarootdir)
-bindir = $(exec_prefix)/bin
-sysconfdir = $(prefix)/etc
-vendordir = $(libdir)/ruby/vendor_ruby
-sharedstatedir = $(prefix)/com
-pdfdir = $(docdir)
-mandir = $(DESTDIR)/usr/share/man
-sitedir = $(DESTDIR)/Library/Ruby/Site
-localstatedir = $(prefix)/var
-includedir = $(prefix)/include
-sitelibdir = $(sitedir)/$(ruby_version)
-htmldir = $(docdir)
-vendorarchdir = $(vendorlibdir)/$(sitearch)
-psdir = $(docdir)
 libdir = $(exec_prefix)/lib
-datarootdir = $(prefix)/share
-rubylibdir = $(libdir)/ruby/$(ruby_version)
-vendorlibdir = $(vendordir)/$(ruby_version)
-docdir = $(datarootdir)/doc/$(PACKAGE)
-sbindir = $(exec_prefix)/sbin
+psdir = $(docdir)
+pdfdir = $(docdir)
 dvidir = $(docdir)
+htmldir = $(docdir)
+infodir = $(datarootdir)/info
+docdir = $(datarootdir)/doc/$(PACKAGE)
+oldincludedir = $(DESTDIR)/usr/include
+includedir = $(prefix)/include
+localstatedir = $(prefix)/var
+sharedstatedir = $(prefix)/com
+sysconfdir = $(prefix)/etc
+datadir = $(datarootdir)
+datarootdir = $(prefix)/share
+libexecdir = $(exec_prefix)/libexec
+sbindir = $(exec_prefix)/sbin
+bindir = $(exec_prefix)/bin
+rubylibdir = $(rubylibprefix)/$(ruby_version)
+archdir = $(rubylibdir)/$(arch)
+sitelibdir = $(sitedir)/$(ruby_version)
+sitearchdir = $(sitelibdir)/$(sitearch)
+vendorlibdir = $(vendordir)/$(ruby_version)
+vendorarchdir = $(vendorlibdir)/$(sitearch)
 
-CC = xcrun cc
-LIBRUBY = $(LIBRUBY_SO)
+NULLCMD = :
+
+CC = gcc
+CXX = g++
+LIBRUBY = $(LIBRUBY_A)
 LIBRUBY_A = lib$(RUBY_SO_NAME)-static.a
-LIBRUBYARG_SHARED = -l$(RUBY_SO_NAME)
-LIBRUBYARG_STATIC = -l$(RUBY_SO_NAME)
+LIBRUBYARG_SHARED = 
+LIBRUBYARG_STATIC = -l$(RUBY_SO_NAME)-static
+empty =
+OUTFLAG = -o $(empty)
+COUTFLAG = -o $(empty)
 
 RUBY_EXTCONF_H = 
-CFLAGS   =  -fno-common -arch x86_64 -g -Os -pipe -fno-common -DENABLE_DTRACE  -fno-common  -pipe -fno-common $(cflags) 
-INCFLAGS = -I. -I. -I/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin12.0 -I/Volumes/MacintoshHD/Projects/Daikini/octave-ruby/ext/octave_api
+cflags   =  $(optflags) $(debugflags) $(warnflags)
+optflags = -O3
+debugflags = -ggdb
+warnflags = -Wall -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wshorten-64-to-32 -Wimplicit-function-declaration
+CFLAGS   = -fno-common $(cflags)  -pipe $(ARCH_FLAG)
+INCFLAGS = -I. -I$(arch_hdrdir) -I$(hdrdir)/ruby/backward -I$(hdrdir) -I$(srcdir)
 DEFS     = 
 CPPFLAGS = -DHAVE_OCTAVE_H -I/usr/local/include -I/usr/local/lib/octave -I/usr/local/include/octave-3.6.2/octave -I/usr/local/lib/octave/3.6.2 -I/usr/local/include/octave-3.6.2
-CXXFLAGS = $(CFLAGS) 
-ldflags  = -L. -arch x86_64 
-dldflags = 
-archflag = 
-DLDFLAGS = $(ldflags) $(dldflags) $(archflag)
+CXXFLAGS = $(CFLAGS) $(cxxflags)
+ldflags  = -L. -L'/Users/jonathan/.rbenv/versions/1.9.3-p286/lib' 
+dldflags = -Wl,-undefined,dynamic_lookup -Wl,-multiply_defined,suppress -Wl,-flat_namespace
+ARCH_FLAG = 
+DLDFLAGS = $(ldflags) $(dldflags) $(ARCH_FLAG)
 LDSHARED = g++ -pipe -bundle
+LDSHAREDXX = $(CXX) -dynamic -bundle
 AR = ar
 EXEEXT = 
 
+RUBY_BASE_NAME = ruby
 RUBY_INSTALL_NAME = ruby
 RUBY_SO_NAME = ruby
-arch = universal-darwin12.0
-sitearch = universal-darwin12.0
-ruby_version = 1.8
-ruby = /System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
+arch = x86_64-darwin12.2.0
+sitearch = $(arch)
+ruby_version = 1.9.1
+ruby = /Users/jonathan/.rbenv/versions/1.9.3-p286/bin/ruby
 RUBY = $(ruby)
 RM = rm -f
+RM_RF = $(RUBY) -run -e rm -- -rf
+RMDIRS = rmdir -p
 MAKEDIRS = mkdir -p
 INSTALL = /usr/bin/install -c
 INSTALL_PROG = $(INSTALL) -m 0755
@@ -81,12 +109,13 @@ DEFFILE =
 
 CLEANFILES = mkmf.log
 DISTCLEANFILES = 
+DISTCLEANDIRS = 
 
 extout = 
 extout_prefix = 
 target_prefix = 
 LOCAL_LIBS = 
-LIBS = $(LIBRUBYARG_SHARED) -loctinterp -lcruft -loctave  -lpthread -ldl -lobjc  
+LIBS =  -loctinterp -lcruft -loctave  -lpthread -ldl -lobjc 
 SRCS = octave_api.c octave-ruby.cpp or-array.cpp or-boolean_matrix.cpp or-cell_matrix.cpp or-hash.cpp or-matrix.cpp or-string.cpp or-struct_matrix.cpp or-variable.cpp
 OBJS = octave_api.o octave-ruby.o or-array.o or-boolean_matrix.o or-cell_matrix.o or-hash.o or-matrix.o or-string.o or-struct_matrix.o or-variable.o
 TARGET = octave_api
@@ -98,60 +127,88 @@ BINDIR        = $(bindir)
 RUBYCOMMONDIR = $(sitedir)$(target_prefix)
 RUBYLIBDIR    = $(sitelibdir)$(target_prefix)
 RUBYARCHDIR   = $(sitearchdir)$(target_prefix)
+HDRDIR        = $(rubyhdrdir)/ruby$(target_prefix)
+ARCHHDRDIR    = $(rubyhdrdir)/$(arch)/ruby$(target_prefix)
 
 TARGET_SO     = $(DLLIB)
-CLEANLIBS     = $(TARGET).bundle $(TARGET).il? $(TARGET).tds $(TARGET).map
-CLEANOBJS     = *.o *.a *.s[ol] *.pdb *.exp *.bak
+CLEANLIBS     = $(TARGET).bundle 
+CLEANOBJS     = *.o  *.bak
 
-all:		$(DLLIB)
-static:		$(STATIC_LIB)
+all:    $(DLLIB)
+static: $(STATIC_LIB)
+.PHONY: all install static install-so install-rb
+.PHONY: clean clean-so clean-rb
 
-clean:
+clean-rb-default::
+clean-rb::
+clean-so::
+clean: clean-so clean-rb-default clean-rb
 		@-$(RM) $(CLEANLIBS) $(CLEANOBJS) $(CLEANFILES)
 
-distclean:	clean
+distclean-rb-default::
+distclean-rb::
+distclean-so::
+distclean: clean distclean-so distclean-rb-default distclean-rb
 		@-$(RM) Makefile $(RUBY_EXTCONF_H) conftest.* mkmf.log
 		@-$(RM) core ruby$(EXEEXT) *~ $(DISTCLEANFILES)
+		@-$(RMDIRS) $(DISTCLEANDIRS) 2> /dev/null || true
 
-realclean:	distclean
+realclean: distclean
 install: install-so install-rb
 
 install-so: $(RUBYARCHDIR)
 install-so: $(RUBYARCHDIR)/$(DLLIB)
 $(RUBYARCHDIR)/$(DLLIB): $(DLLIB)
-	$(INSTALL_PROG) $(DLLIB) $(RUBYARCHDIR)
+	@-$(MAKEDIRS) $(@D)
+	$(INSTALL_PROG) $(DLLIB) $(@D)
 install-rb: pre-install-rb install-rb-default
 install-rb-default: pre-install-rb-default
 pre-install-rb: Makefile
 pre-install-rb-default: Makefile
+pre-install-rb-default:
+	$(ECHO) installing default octave_api libraries
 $(RUBYARCHDIR):
-	$(MAKEDIRS) $@
+	$(Q) $(MAKEDIRS) $@
 
 site-install: site-install-so site-install-rb
 site-install-so: install-so
 site-install-rb: install-rb
 
-.SUFFIXES: .c .m .cc .cxx .cpp .C .o
+.SUFFIXES: .c .m .cc .mm .cxx .cpp .C .o
 
 .cc.o:
-	$(CXX) $(INCFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c $<
+	$(ECHO) compiling $(<)
+	$(Q) $(CXX) $(INCFLAGS) $(CPPFLAGS) $(CXXFLAGS) $(COUTFLAG)$@ -c $<
+
+.mm.o:
+	$(ECHO) compiling $(<)
+	$(Q) $(CXX) $(INCFLAGS) $(CPPFLAGS) $(CXXFLAGS) $(COUTFLAG)$@ -c $<
 
 .cxx.o:
-	$(CXX) $(INCFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c $<
+	$(ECHO) compiling $(<)
+	$(Q) $(CXX) $(INCFLAGS) $(CPPFLAGS) $(CXXFLAGS) $(COUTFLAG)$@ -c $<
 
 .cpp.o:
-	$(CXX) $(INCFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c $<
+	$(ECHO) compiling $(<)
+	$(Q) $(CXX) $(INCFLAGS) $(CPPFLAGS) $(CXXFLAGS) $(COUTFLAG)$@ -c $<
 
 .C.o:
-	$(CXX) $(INCFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c $<
+	$(ECHO) compiling $(<)
+	$(Q) $(CXX) $(INCFLAGS) $(CPPFLAGS) $(CXXFLAGS) $(COUTFLAG)$@ -c $<
 
 .c.o:
-	$(CC) $(INCFLAGS) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(ECHO) compiling $(<)
+	$(Q) $(CC) $(INCFLAGS) $(CPPFLAGS) $(CFLAGS) $(COUTFLAG)$@ -c $<
+
+.m.o:
+	$(ECHO) compiling $(<)
+	$(Q) $(CC) $(INCFLAGS) $(CPPFLAGS) $(CFLAGS) $(COUTFLAG)$@ -c $<
 
 $(DLLIB): $(OBJS) Makefile
-	@-$(RM) $@
-	$(LDSHARED) -o $@ $(OBJS) $(LIBPATH) $(DLDFLAGS) $(LOCAL_LIBS) $(LIBS)
+	$(ECHO) linking shared-object $(DLLIB)
+	@-$(RM) $(@)
+	$(Q) $(LDSHAREDXX) -o $@ $(OBJS) $(LIBPATH) $(DLDFLAGS) $(LOCAL_LIBS) $(LIBS)
 
 
 
-$(OBJS): ruby.h defines.h
+$(OBJS): $(hdrdir)/ruby.h $(hdrdir)/ruby/defines.h $(arch_hdrdir)/ruby/config.h

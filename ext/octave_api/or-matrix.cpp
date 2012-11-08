@@ -70,13 +70,13 @@ octave_value OR_Matrix::to_octave()
   Matrix matrix = Matrix(number_of_rows, number_of_columns);
   
   for (row_index = 0; row_index < number_of_rows; row_index++) {
-    row = RARRAY(cells)->ptr[row_index];
+    row = RARRAY_PTR(cells)[row_index];
     
     for (column_index = 0; column_index < number_of_columns; column_index++) {
-      cell = RARRAY(row)->ptr[column_index];
+      cell = RARRAY_PTR(row)[column_index];
       
       if (rb_type(cell) == T_FLOAT) {
-        matrix(row_index, column_index) = RFLOAT(cell)->value;
+        matrix(row_index, column_index) = RFLOAT_VALUE(cell);
       } else if (rb_type(cell) == T_FIXNUM) {
         matrix(row_index, column_index) = FIX2LONG(cell);
       } else {

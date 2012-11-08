@@ -19,12 +19,15 @@ class EngineTest_Init < Test::Unit::TestCase
     exception = assert_raise(LoadError) do
       engine = Octave::Engine.new(:driver => "foo")
     end
-    assert_equal "no such file to load -- octave/driver/foo/driver", exception.message
+    
+    expected_message = "-- octave/driver/foo/driver"
+    assert_equal expected_message, exception.message[-expected_message.length, expected_message.length]
     
     exception = assert_raise(LoadError) do
       engine = Octave::Engine.new(:driver => :bar)
     end
-    assert_equal "no such file to load -- octave/driver/bar/driver", exception.message
+    expected_message = "-- octave/driver/bar/driver"
+    assert_equal expected_message, exception.message[-expected_message.length, expected_message.length]
   end
   
   def test_new_with_native_driver

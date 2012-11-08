@@ -26,5 +26,9 @@ if have_header("octave.h" ) &&
     end
   end
   
+  if RUBY_VERSION =~ /1.8/ then
+      $CPPFLAGS += " -DRUBY_18"
+  end
+  
   create_makefile( "octave_api" )
 end
