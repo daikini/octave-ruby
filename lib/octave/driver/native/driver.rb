@@ -11,16 +11,11 @@ module Octave ; module Driver ; module Native
     end
     
     def put_variable(name, value)
-      global_name = "octave_ruby_#{name}"
-      feval("eval", "function octave_ruby_put_variable(value) global #{global_name}; #{global_name} = value; endfunction")
-      feval("octave_ruby_put_variable", value)
-      result = feval("eval", "global #{global_name}; #{name} = #{global_name}")
-      feval("clear", global_name)
-      result
+      API.put_variable(name, value)
     end
     
     def get_variable(name)
-      feval("eval", name)
+      API.get_variable(name)
     end  
   end
 end ; end ; end

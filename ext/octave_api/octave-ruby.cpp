@@ -13,11 +13,11 @@ void initialize_octave()
 
 extern void recover_from_exception(void)
 {
-  unwind_protect::run_all();
+  // unwind_protect::run_all();
   can_interrupt = true;
   octave_interrupt_immediately = 0;
   octave_interrupt_state = 0;
-  octave_allocation_error = 0;
+  octave_exception_state = octave_no_exception;
 }
 
 VALUE or_feval(VALUE function_name, VALUE arguments)
@@ -33,7 +33,7 @@ VALUE or_feval(VALUE function_name, VALUE arguments)
   }
   
   if (octave_set_current_context) {
-    unwind_protect::run_all();
+    // unwind_protect::run_all();
     raw_mode(0);
   }
 
@@ -41,7 +41,7 @@ VALUE or_feval(VALUE function_name, VALUE arguments)
   octave_initialized = true;
 
   try {
-    curr_sym_tab = top_level_sym_tab;
+    symbol_table::set_scope(symbol_table::top_scope());
     reset_error_handler();
     
     octave_value_list val = feval(std::string(RSTRING(function_name)->ptr), argList, 1);
@@ -59,4 +59,15 @@ VALUE or_feval(VALUE function_name, VALUE arguments)
   octave_initialized = false;
 
   return(ruby_val);
+}
+
+extern VALUE or_get_variable(VALUE variable_name)
+{
+  return OR_Variable(get_top_level_value(std::string(RSTRING(variable_name)->ptr))).to_ruby();
+}
+
+extern VALUE or_put_variable(VALUE variable_name, VALUE value)
+{
+  set_top_level_value(std::string(RSTRING(variable_name)->ptr), OR_Variable(value).to_octave());
+  return value;
 }

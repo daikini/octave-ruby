@@ -24,9 +24,12 @@ class DriverTest < Test::Unit::TestCase
   
   def test_putting_variable_with_same_name_multiple_times
     assert_equal "foo", @driver.put_variable("some_variable_name", "foo")
-    assert_equal "bar", @driver.put_variable("some_variable_name", "bar")
-    assert_equal "baz", @driver.put_variable("some_variable_name", "baz")
+    assert_equal "foo", @driver.get_variable("some_variable_name")
     
+    assert_equal "bar", @driver.put_variable("some_variable_name", "bar")
+    assert_equal "bar", @driver.get_variable("some_variable_name")
+    
+    assert_equal "baz", @driver.put_variable("some_variable_name", "baz")
     assert_equal "baz", @driver.get_variable("some_variable_name")
   end
 end

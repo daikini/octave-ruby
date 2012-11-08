@@ -9,6 +9,8 @@ extern "C"
 #endif
 
 extern VALUE or_feval(VALUE function_name, VALUE arguments);
+extern VALUE or_get_variable(VALUE variable_name);
+extern VALUE or_put_variable(VALUE variable_name, VALUE value);
 extern void initialize_octave();
 
 #ifdef __cplusplus /* extern "C" */

@@ -3,57 +3,64 @@ SHELL = /bin/sh
 
 #### Start of system configuration section. ####
 
-srcdir = .
-topdir = /System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin9.0
+srcdir = /Volumes/MacintoshHD/Projects/Daikini/octave-ruby/ext/octave_api
+topdir = /System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin12.0
 hdrdir = $(topdir)
 VPATH = $(srcdir):$(topdir):$(hdrdir)
 prefix = $(DESTDIR)/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr
 exec_prefix = $(prefix)
-sitedir = $(DESTDIR)/Library/Ruby/Site
-rubylibdir = $(libdir)/ruby/$(ruby_version)
-docdir = $(datarootdir)/doc/$(PACKAGE)
-dvidir = $(docdir)
-datarootdir = $(prefix)/share
-archdir = $(rubylibdir)/$(arch)
-sbindir = $(exec_prefix)/sbin
-psdir = $(docdir)
-localedir = $(datarootdir)/locale
-htmldir = $(docdir)
-datadir = $(datarootdir)
-includedir = $(prefix)/include
-infodir = $(DESTDIR)/usr/share/info
-sysconfdir = $(prefix)/etc
-mandir = $(DESTDIR)/usr/share/man
-libdir = $(exec_prefix)/lib
-sharedstatedir = $(prefix)/com
-oldincludedir = $(DESTDIR)/usr/include
-pdfdir = $(docdir)
 sitearchdir = $(sitelibdir)/$(sitearch)
-bindir = $(exec_prefix)/bin
-localstatedir = $(prefix)/var
-sitelibdir = $(sitedir)/$(ruby_version)
 libexecdir = $(exec_prefix)/libexec
+localedir = $(datarootdir)/locale
+oldincludedir = $(DESTDIR)/usr/include
+infodir = $(DESTDIR)/usr/share/info
+archdir = $(rubylibdir)/$(arch)
+datadir = $(datarootdir)
+bindir = $(exec_prefix)/bin
+sysconfdir = $(prefix)/etc
+vendordir = $(libdir)/ruby/vendor_ruby
+sharedstatedir = $(prefix)/com
+pdfdir = $(docdir)
+mandir = $(DESTDIR)/usr/share/man
+sitedir = $(DESTDIR)/Library/Ruby/Site
+localstatedir = $(prefix)/var
+includedir = $(prefix)/include
+sitelibdir = $(sitedir)/$(ruby_version)
+htmldir = $(docdir)
+vendorarchdir = $(vendorlibdir)/$(sitearch)
+psdir = $(docdir)
+libdir = $(exec_prefix)/lib
+datarootdir = $(prefix)/share
+rubylibdir = $(libdir)/ruby/$(ruby_version)
+vendorlibdir = $(vendordir)/$(ruby_version)
+docdir = $(datarootdir)/doc/$(PACKAGE)
+sbindir = $(exec_prefix)/sbin
+dvidir = $(docdir)
 
-CC = gcc
+CC = xcrun cc
 LIBRUBY = $(LIBRUBY_SO)
 LIBRUBY_A = lib$(RUBY_SO_NAME)-static.a
 LIBRUBYARG_SHARED = -l$(RUBY_SO_NAME)
 LIBRUBYARG_STATIC = -l$(RUBY_SO_NAME)
 
 RUBY_EXTCONF_H = 
-CFLAGS   =  -fno-common -arch i386 -Os -pipe -fno-common 
-INCFLAGS = -I. -I. -I/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin9.0 -I.
-CPPFLAGS = -DHAVE_OCTAVE_H -I/Applications/Octave.app/Contents/Resources/include -I/Applications/Octave.app/Contents/Resources/lib -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.2/octave -I/Applications/Octave.app/Contents/Resources/lib/octave-3.0.2 -I/Applications/Octave.app/Contents/Resources/include/octave-3.0.2
+CFLAGS   =  -fno-common -arch x86_64 -g -Os -pipe -fno-common -DENABLE_DTRACE  -fno-common  -pipe -fno-common $(cflags) 
+INCFLAGS = -I. -I. -I/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin12.0 -I/Volumes/MacintoshHD/Projects/Daikini/octave-ruby/ext/octave_api
+DEFS     = 
+CPPFLAGS = -DHAVE_OCTAVE_H -I/usr/local/include -I/usr/local/lib/octave -I/usr/local/include/octave-3.6.2/octave -I/usr/local/lib/octave/3.6.2 -I/usr/local/include/octave-3.6.2
 CXXFLAGS = $(CFLAGS) 
-DLDFLAGS = -L. -arch i386  
+ldflags  = -L. -arch x86_64 
+dldflags = 
+archflag = 
+DLDFLAGS = $(ldflags) $(dldflags) $(archflag)
 LDSHARED = g++ -pipe -bundle
 AR = ar
 EXEEXT = 
 
 RUBY_INSTALL_NAME = ruby
 RUBY_SO_NAME = ruby
-arch = universal-darwin9.0
-sitearch = universal-darwin9.0
+arch = universal-darwin12.0
+sitearch = universal-darwin12.0
 ruby_version = 1.8
 ruby = /System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
 RUBY = $(ruby)
@@ -68,8 +75,8 @@ COPY = cp
 
 preload = 
 
-libpath = . $(libdir) /Applications/Octave.app/Contents/Resources/lib /Applications/Octave.app/Contents/Resources/lib/octave-3.0.2
-LIBPATH =  -L"." -L"$(libdir)" -L"/Applications/Octave.app/Contents/Resources/lib" -L"/Applications/Octave.app/Contents/Resources/lib/octave-3.0.2"
+libpath = . $(libdir) /usr/local/lib/octave /usr/local/lib/octave/3.6.2
+LIBPATH =  -L. -L$(libdir) -L/usr/local/lib/octave -L/usr/local/lib/octave/3.6.2
 DEFFILE = 
 
 CLEANFILES = mkmf.log
@@ -79,7 +86,7 @@ extout =
 extout_prefix = 
 target_prefix = 
 LOCAL_LIBS = 
-LIBS = $(LIBRUBYARG_SHARED) -loctinterp -lcruft -loctave  -lpthread -ldl -lm  
+LIBS = $(LIBRUBYARG_SHARED) -loctinterp -lcruft -loctave  -lpthread -ldl -lobjc  
 SRCS = octave_api.c octave-ruby.cpp or-array.cpp or-boolean_matrix.cpp or-cell_matrix.cpp or-hash.cpp or-matrix.cpp or-string.cpp or-struct_matrix.cpp or-variable.cpp
 OBJS = octave_api.o octave-ruby.o or-array.o or-boolean_matrix.o or-cell_matrix.o or-hash.o or-matrix.o or-string.o or-struct_matrix.o or-variable.o
 TARGET = octave_api
@@ -87,6 +94,7 @@ DLLIB = $(TARGET).bundle
 EXTSTATIC = 
 STATIC_LIB = 
 
+BINDIR        = $(bindir)
 RUBYCOMMONDIR = $(sitedir)$(target_prefix)
 RUBYLIBDIR    = $(sitelibdir)$(target_prefix)
 RUBYARCHDIR   = $(sitearchdir)$(target_prefix)
@@ -140,7 +148,7 @@ site-install-rb: install-rb
 .c.o:
 	$(CC) $(INCFLAGS) $(CPPFLAGS) $(CFLAGS) -c $<
 
-$(DLLIB): $(OBJS)
+$(DLLIB): $(OBJS) Makefile
 	@-$(RM) $@
 	$(LDSHARED) -o $@ $(OBJS) $(LIBPATH) $(DLDFLAGS) $(LOCAL_LIBS) $(LIBS)
 

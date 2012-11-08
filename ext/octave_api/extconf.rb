@@ -7,7 +7,7 @@ dep_dirs = dir_config( "dep", octave_dirs.first.split(File::SEPARATOR)[0..-3].jo
 if have_header("octave.h" ) &&
   have_library("octave") &&
   have_library("cruft") &&
-  have_library("octinterp", "octave_main" )
+  have_library("octinterp")
   
   if Config::CONFIG["arch"] =~ /-darwin\d/
     CONFIG['LDSHARED'] = "g++ -pipe -bundle"

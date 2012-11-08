@@ -9,11 +9,11 @@ require 'yaml'
 class ConversionsTest < Test::Unit::TestCase
   def setup
     @driver = Octave::Driver::Native::Driver.new
-    @driver.feval "eval", "function r = to_octave(val); r = val; endfunction"
   end
   
   def to_octave_to_ruby(value)
-    @driver.feval "to_octave", value
+    @driver.put_variable("to_octave_to_ruby_variable", value)
+    @driver.get_variable("to_octave_to_ruby_variable")
   end
   
   def assert_octave_and_ruby_equal(value)
@@ -197,7 +197,8 @@ class ConversionsTest < Test::Unit::TestCase
   
   def test_should_convert_boolean_matrix
     assert_octave_and_ruby_equal [true, false, true]
-    boolean_matrix = @driver.feval "eval", "x = [1,2]; (x > 2 | x < 2)"
+    @driver.put_variable("x", [1,2])
+    boolean_matrix = @driver.feval "eval", "(x > 2 | x < 2)"
     assert_equal [true, false], boolean_matrix
   end
 end
