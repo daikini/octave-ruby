@@ -55,4 +55,4 @@ If you have Octave installed in a non-standard location, you can specify the loc
 
 octave-ruby is licensed under the GPL License.
 
-Copyright (c) 2007 Jonathan Younger <jonathan.younger@lipomics.com>
+Copyright (c) 2007-2012 Jonathan Younger <jonathan@daikini.com>
