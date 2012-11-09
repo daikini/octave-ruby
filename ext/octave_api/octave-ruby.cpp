@@ -28,6 +28,8 @@ VALUE or_feval(VALUE function_name, VALUE arguments)
   
   n = RARRAY_LEN(arguments);
   
+  bool is_function_definition = (n == 1 && FIXNUM_P(RARRAY_PTR(arguments)[0]) == 0 && strncmp(RSTRING_PTR(StringValue(RARRAY_PTR(arguments)[0])), "function ", 9) == 0);
+  
   for (i = 0; i < n; i++) {
     argList(i) = OR_Variable(RARRAY_PTR(arguments)[i]).to_octave();
   }
@@ -44,7 +46,8 @@ VALUE or_feval(VALUE function_name, VALUE arguments)
     symbol_table::set_scope(symbol_table::top_scope());
     reset_error_handler();
     
-    octave_value_list val = feval(std::string(RSTRING_PTR(function_name)), argList, 1);
+    int nargout = (is_function_definition ? 0 : 1);
+    octave_value_list val = feval(std::string(RSTRING_PTR(function_name)), argList, nargout);
     if(val.length() > 0 && val(0).is_defined()) {
       ruby_val = OR_Variable(val(0)).to_ruby();
     }
