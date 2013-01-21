@@ -36,6 +36,11 @@ module Octave
     def ==(other)
       @cells == other.cells
     end
+    
+    # Returns flattened cells
+    def to_a
+      @cells.flatten
+    end
   end
   
   # The CellMatrix class is used for storing values that are sent to

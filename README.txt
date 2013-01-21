@@ -47,12 +47,12 @@ octave-ruby (you must have RubyGems and Octave installed, first):
 
 If you have Octave installed in a non-standard location, you can specify the location of the include and lib files by doing:
 
-  * gem install octave-ruby -- --with-octave-include=/usr/local/include/octave-3.0.0/octave \
-     --with-octave-lib=/usr/local/lib/octave-3.0.0 \
-     --with-dep-include=/usr/local/include/octave-3.0.0
+  * gem install octave-ruby -- --with-octave-include=/usr/local/include/octave-3.6.3/octave \
+     --with-octave-lib=/usr/local/lib/octave-3.6.3 \
+     --with-dep-include=/usr/local/include/octave-3.6.3
   
 == LICENSE
 
 octave-ruby is licensed under the GPL License.
 
-Copyright (c) 2007-2012 Jonathan Younger <jonathan@daikini.com>
+Copyright (c) 2007-2013 Jonathan Younger <jonathan@daikini.com>

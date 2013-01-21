@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name = %q{octave-ruby}
-  s.version = "2.0.1"
+  s.version = "2.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jonathan Younger"]
-  s.date = %q{2012-11-08}
+  s.date = %q{2013-01-21}
   s.description = %q{== USAGE:  require 'octave'  engine = Octave::Engine.new engine.eval "123.456 * 789.101112" engine.rand(10)  matrix = Octave::Matrix.new(20, 400) 20.times { |m| 400.times { |n| matrix[m, n] = rand } } engine.put_variable("m", matrix)  engine.save "/tmp/20_x_400_matrix"  == REQUIREMENTS:  * Octave * GCC or some other compiler to build the included extension * Mocha (For testing only)}
   s.email = ["jonathan@daikini.com"]
   s.extensions = ["ext/octave_api/extconf.rb"]

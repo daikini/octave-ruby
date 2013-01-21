@@ -1,5 +1,10 @@
 == 2.0.1 / 2012-11-09
 
+* 1 minor enhancement
+  * Added to_a method to Octave::Matrix
+  
+== 2.0.1 / 2012-11-09
+
 * 1 major bug fix
   * Fix crash when defining functions using eval
   
